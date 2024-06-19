@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { icons } from "../constants";
 import { router, usePathname } from "expo-router";
 
-const SearchInput = ({ initialQuery }) => {
+const SearchInput = ({ initialQuery, isSavedVideo, setInputVal }) => {
   const pathname = usePathname();
   const [query, setQuery] = useState(initialQuery || "");
   return (
@@ -18,8 +18,12 @@ const SearchInput = ({ initialQuery }) => {
       <TouchableOpacity
         onPress={() => {
           if (!query) return Alert.alert("Mising Query", "Please input something to search results across database");
-          if (pathname.startsWith("/search")) router.setParams({ query });
-          else router.push(`/search/${query}`);
+          if (isSavedVideo) {
+            setInputVal(query);
+          } else {
+            if (pathname.startsWith("/search")) router.setParams({ query });
+            else router.push(`/search/${query}`);
+          }
         }}
       >
         <Image source={icons.search} className="w-5 h-5" resizeMode="contain" />
